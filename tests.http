@@ -1,0 +1,11 @@
+###
+GET http://localhost:3000/api/v1/health
+Accept: application/json
+Content-Type: application/json
+X-API-Key:09f9e80c-276f-4255-80b5-309e496b11ae
+
+###
+GET http://localhost:3000/api/v1
+Accept: application/json
+Content-Type: application/json
+X-API-Key:09f9e80c-276f-4255-80b5-309e496b11ae
