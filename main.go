@@ -25,7 +25,7 @@ func main() {
 	api := app.Group("/api/v1")
 	api.Use(config.APIKeyMiddleware())
 
-	api.Get("/", func(c *fiber.Ctx) error {
+	api.Get("/hi", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"success": true, "message": "Welcome to the API!"})
 	})
 
@@ -37,6 +37,7 @@ func main() {
 		})
 	})
 
+	//lupa set load env ntar lah malas
 	if err := app.Listen(":3000"); err != nil {
 		panic(err)
 	}

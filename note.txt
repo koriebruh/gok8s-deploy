@@ -1,3 +1,5 @@
+
+# package we are going to use
 go get -u github.com/gofiber/fiber/v2
 go get github.com/stretchr/testify/assert
 go get github.com/json-iterator/go
@@ -5,3 +7,23 @@ go get github.com/gofiber/fiber/v2/middleware/cors
 go get github.com/joho/godotenv
 go get github.com/gofiber/fiber/v2/middleware/recover
 go get github.com/gofiber/fiber/v2/middleware/helmet
+
+# comand we are going to use
+docker build -t koriebruh/go-apps-deployment:v2 .
+
+idk why feature multi cotre is not working faq padahal udah gw set sync biat load only 1 times
+
+# testing container before deploying into kubernetes
+docker run -d -p 3000:3000 \
+  -e APP_ENV=production \
+  -e ENABLE_PREFORK=false \
+  -e API_KEY=09f9e80c-276f-4255-80b5-309e496b11ae \
+  -e ALLOWED_ORIGINS="https://yourdomain.com" \
+  -e PORT=3000 \
+  koriebruh/go-apps-deployment:v2
+
+# log any error
+
+ docker logs testgo-apps
+ docker rm testgo-apps
+

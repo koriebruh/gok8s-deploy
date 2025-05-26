@@ -12,14 +12,31 @@ import (
 	jsoniter "github.com/json-iterator/go"
 	"log"
 	"os"
+	"sync"
 	"time"
 )
 
+var (
+	configLoaded bool
+	configMutex  sync.Once
+)
+
 func LoadConfig() {
-	if err := godotenv.Load(); err != nil {
-		log.Printf("Warning: .env file not found: %v", err)
-	}
+	configMutex.Do(func() {
+		// Hanya coba load .env jika bukan production
+		if os.Getenv("APP_ENV") != "production" {
+			if err := godotenv.Load(); err != nil {
+				log.Printf("Warning: .env file not found: %v", err)
+			} else {
+				log.Println("Successfully loaded .env file")
+			}
+		} else {
+			log.Println("Production mode: using environment variables directly")
+		}
+		configLoaded = true
+	})
 }
+
 func GetEnv(key, fallback string) string {
 	// Cek environment variable, jika tidak ada, gunakan fallback(nilai cadangan)
 	if value := os.Getenv(key); value != "" {
@@ -37,7 +54,7 @@ func IsProduction() bool {
 // jsoniter make JSON encoding/decoding lebih efisien
 var FiberConfig = fiber.Config{
 	AppName:                   "grab-orders-service",
-	Prefork:                   IsProduction(), // untuk multi-core, aktifkan di production
+	Prefork:                   GetEnv("ENABLE_PREFORK", "false") == "true", // untuk multi-core, aktifkan di production
 	Immutable:                 true,
 	StrictRouting:             true,
 	CaseSensitive:             true,

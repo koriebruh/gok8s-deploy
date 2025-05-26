@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: go-apps
+    labels:
+        app: go-apps
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: go-apps
+    template:
+        metadata:
+            labels:
+                app: go-apps
+        spec:
+            containers:
+            - name: go-apps
+              image: koriebruh/go-apps-deployment:v2
+              ports:
+              - containerPort: 8080
+              env:
+              - name: APP_ENV
+                value: "development"
+              - name: API_KEY
+                value: "09f9e80c-276f-4255-80b5-309e496b11ae"
+              - name: ALLOWED_ORIGINS
+                value: "http://localhost:3000,https://yourdomain.com,https://www.yourdomain.com"
+              - name: ENABLE_PREFORK
+                value: "false" # harusnya true but tapi kalo true error tabarakn go routine load mybe shoud use mutex not sync
+              resources:
+                requests:
+                  memory: "64Mi"
+                  cpu: "250m"
+                limits:
+                  memory: "128Mi"
+                  cpu: "500m"
